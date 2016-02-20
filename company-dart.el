@@ -45,8 +45,10 @@
 
 
 (defun dart--company-prepare-candidates (response)
-  "Grab candidates and properties from Json response."
-  (let ((completions (cdr (assq 'results (assq 'params response)))))
+  "Build completion from the parsed data received from the analysis server.
+
+Argument RESPONSE contains the candidates, documentation, parameters to be displayed."
+  (-when-let* ((completions (cdr (assq 'results (assq 'params response)))))
     (mapcar
      (lambda (completion)
        (let ((docSummary (assoc 'docSummary completion))
@@ -62,8 +64,10 @@
 
 
 (defun dart--register-for-completion-event (response callback)
-  "Get the result-id passed by the analysis server and register a callback to
-be invoked when the event is received."
+  "Register for the event that the analysis server will send.
+
+Argument RESPONSE parsed data received from the analysis server.
+Argument CALLBACK the callback to be invoked when an event is received."
   (-when-let* ((result-assoc (assoc 'result response))
   	       (id-assoc (assoc 'id result-assoc))
   	       (raw-id (cdr id-assoc))
@@ -76,7 +80,9 @@ be invoked when the event is received."
   	  dart--analysis-completion-callbacks)))
 
 (defun dart--get-completions ( callback)
-  "Ask the analysis server for suggestions."
+  "Ask the analysis server for suggestions.
+
+Argument CALLBACK the callback defined by ‘company-mode’."
   (dart--analysis-server-send
    "completion.getSuggestions"
    `((file . ,(buffer-file-name))
