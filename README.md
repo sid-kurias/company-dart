@@ -2,8 +2,9 @@
 Company mode autocompletion for Dart
 
  Add something similar to your init file
- (add-hook 'dart-mode-hook (lambda ()
-    (set (make-local-variable 'company-backends)
+ 
+    (add-hook 'dart-mode-hook (lambda ()
+     (set (make-local-variable 'company-backends)
       '(company-dart (company-dabbrev company-yasnippet)))))
 
  Dart completion will be invoked only after the "." character has been typed.
