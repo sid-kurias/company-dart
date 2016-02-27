@@ -43,7 +43,7 @@
 (require 'dart-mode)
 (require 'company)
 
-(defvar dart--company-callback nil)
+(defvar dart--company-callback nil "Variable to hold company-mode callback")
 
 (defun dart--company-prepare-candidates (response)
   "Build completion from the parsed data received from the analysis server.
