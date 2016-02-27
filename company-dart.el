@@ -43,6 +43,7 @@
 (require 'dart-mode)
 (require 'company)
 
+(defvar dart--company-callback nil)
 
 (defun dart--company-prepare-candidates (response)
   "Build completion from the parsed data received from the analysis server.
@@ -63,11 +64,10 @@ Argument RESPONSE contains the candidates, documentation, parameters to be displ
      completions)))
 
 
-(defun dart--register-for-completion-event (response callback)
+(defun dart--register-for-completion-event (response)
   "Register for the event that the analysis server will send.
 
-Argument RESPONSE parsed data received from the analysis server.
-Argument CALLBACK the callback to be invoked when an event is received."
+Argument RESPONSE parsed data received from the analysis server."
   (-when-let* ((result-assoc (assoc 'result response))
   	       (id-assoc (assoc 'id result-assoc))
   	       (raw-id (cdr id-assoc))
@@ -76,25 +76,24 @@ Argument CALLBACK the callback to be invoked when an event is received."
   		(lambda (resp)
   		  (-when-let* ((candidates (dart--company-prepare-candidates
   					    resp)))
-  		    (funcall callback candidates))))
-  	  dart--analysis-completion-callbacks)))
+  		    (funcall dart--company-callback  candidates))))
+  	  dart--analysis-server-callbacks)))
 
-(defun dart--get-completions ( callback)
-  "Ask the analysis server for suggestions.
+(defun dart--get-completions ()
+  "Ask the analysis server for suggestions."
 
-Argument CALLBACK the callback defined by ‘company-mode’."
   (dart--analysis-server-send
    "completion.getSuggestions"
    `((file . ,(buffer-file-name))
      (offset . ,(point)))
    (lambda (response)
-     (dart--register-for-completion-event response callback)))
+     (dart--register-for-completion-event response)))
 
   ;; Company mode expects the candidates to be ready as soon as this routine
   ;; exits. The analysis server sends the candidates information via a
-  ;; subsequent notification. Wait 100ms to receive and process that
+  ;; subsequent notification. Wait 200ms to receive and process that
   ;; notification.
-  (sleep-for 0 100))
+  (sleep-for 0 200))
 
 
 (defun dart--completion-meta (s)
@@ -106,18 +105,22 @@ Argument CALLBACK the callback defined by ‘company-mode’."
   (--when-let (get-text-property 0 'docComplete s)
     (company-doc-buffer it)))
 
+(defun dart--company-prefix ()
+  (let ((dart-symbol (company-grab-symbol-cons "\\." 1)))
+    (if (consp dart-symbol) t nil)))
+
 ;;;###autoload
 (defun company-dart (command &optional arg &rest ignored)
   (interactive (list 'interactive))
   (case command
     (interactive (company-begin-backend 'company-dart))
     (prefix (if (and (derived-mode-p 'dart-mode)
-		     (save-excursion (eq (char-before) 46)))
-		"" nil))
+		     (dart--company-prefix)) "" nil))
     (candidates
      (cons :async
-           (lambda (callback)
-	     (dart--get-completions callback))))
+	   (lambda (callback)
+	     (setq dart--company-callback callback)
+	     (dart--get-completions))))
     (duplicates t)
     (doc-buffer (dart--completion-doc arg))
     (meta (dart--completion-meta arg))))
