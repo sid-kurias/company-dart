@@ -1,4 +1,4 @@
-;;; company-dart.el
+;;; company-dart.el --- Autocompletion for Dart files -*- lexical-binding: t; -*-
 
 ;; Author: Sidart Kurias
 ;; Version: 0.01
@@ -29,8 +29,7 @@
 ;; Dart completion will be invoked only after the "." character has been typed.
 ;; For this to work company-minimum-prefix-length should be set to 0. If that
 ;; is inconvenient you can manually invoke completion by binding (company-dart)
-;; to any key you like.  Includes an almighty hack (sleep-for). Removing this
-;; will need modification in company-mode (??).
+;; to any key you like.
 ;;
 ;; A good source for snippets
 ;; https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/
@@ -43,7 +42,6 @@
 (require 'dart-mode)
 (require 'company)
 
-(defvar dart--company-callback nil "Variable to hold company-mode callback")
 
 (defun dart--company-prepare-candidates (response)
   "Build completion from the parsed data received from the analysis server.
@@ -56,15 +54,14 @@ Argument RESPONSE contains the candidates, documentation, parameters to be displ
 	     (parameters  (assoc 'parameters (assoc 'element completion)))
 	     (docComplete  (assoc 'docComplete completion))
 	     (candidate (cdr (assq 'completion completion))))
-	 (propertize
-	  (concat candidate (format "%s" (if  parameters (cdr parameters) " ")))
-	  (car docSummary) (cdr docSummary)
-	  (car docComplete) (cdr docComplete))
-	 ))
+	 (propertize  candidate
+		      (car parameters) (cdr parameters)
+		      (car docSummary) (cdr docSummary)
+		      (car docComplete) (cdr docComplete))))
      completions)))
 
 
-(defun dart--register-for-completion-event (response)
+(defun dart--register-for-completion-event (response callback buffer)
   "Register for the event that the analysis server will send.
 
 Argument RESPONSE parsed data received from the analysis server."
@@ -76,10 +73,11 @@ Argument RESPONSE parsed data received from the analysis server."
   		(lambda (resp)
   		  (-when-let* ((candidates (dart--company-prepare-candidates
   					    resp)))
-  		    (funcall dart--company-callback  candidates))))
+		    (with-current-buffer buffer
+		      (funcall callback  candidates)))))
   	  dart--analysis-server-callbacks)))
 
-(defun dart--get-completions ()
+(defun dart--get-completions (callback buffer)
   "Ask the analysis server for suggestions."
 
   (dart--analysis-server-send
@@ -87,14 +85,11 @@ Argument RESPONSE parsed data received from the analysis server."
    `((file . ,(buffer-file-name))
      (offset . ,(point)))
    (lambda (response)
-     (dart--register-for-completion-event response)))
+     (dart--register-for-completion-event response callback buffer))))
 
-  ;; Company mode expects the candidates to be ready as soon as this routine
-  ;; exits. The analysis server sends the candidates information via a
-  ;; subsequent notification. Wait 200ms to receive and process that
-  ;; notification.
-  (sleep-for 0 200))
-
+(defun dart--completion-annotation (s)
+  "Show method parameters as annotations"
+  (get-text-property 0 'parameters s))
 
 (defun dart--completion-meta (s)
   "Show summary documentation."
@@ -106,23 +101,28 @@ Argument RESPONSE parsed data received from the analysis server."
     (company-doc-buffer it)))
 
 (defun dart--company-prefix ()
-  (let ((dart-symbol (company-grab-symbol-cons "\\." 1)))
-    (if (consp dart-symbol) t nil)))
+  (let ((sym (company-grab-symbol-cons "\\." 1)))
+    (if (consp sym) sym nil)))
 
 ;;;###autoload
 (defun company-dart (command &optional arg &rest ignored)
   (interactive (list 'interactive))
   (case command
     (interactive (company-begin-backend 'company-dart))
-    (prefix (if (and (derived-mode-p 'dart-mode)
-		     (dart--company-prefix)) "" nil))
+    (prefix (and (derived-mode-p 'dart-mode)
+		 (dart--company-prefix)))
     (candidates
      (cons :async
 	   (lambda (callback)
-	     (setq dart--company-callback callback)
-	     (dart--get-completions))))
+	     (dart--get-completions callback (current-buffer)))))
     (duplicates t)
+    (annotations (dart--completion-annotation arg))
     (doc-buffer (dart--completion-doc arg))
-    (meta (dart--completion-meta arg))))
+    (meta (dart--completion-meta arg))
+    (post-completion (let ((anno (dart--completion-annotation arg)))
+		       (when anno
+			 (insert anno)
+			 (backward-list)
+			 )))))
 
 (provide 'company-dart)
