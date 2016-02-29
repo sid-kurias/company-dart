@@ -27,8 +27,7 @@
 ;;      '(company-dart (company-dabbrev company-yasnippet)))))
 ;;
 ;; Dart completion will be invoked only after the "." character has been typed.
-;; For this to work company-minimum-prefix-length should be set to 0. If that
-;; is inconvenient you can manually invoke completion by binding (company-dart)
+;; You can manually invoke completion by binding (company-dart)
 ;; to any key you like.
 ;;
 ;; A good source for snippets
@@ -64,7 +63,9 @@ Argument RESPONSE contains the candidates, documentation, parameters to be displ
 (defun dart--register-for-completion-event (response callback buffer)
   "Register for the event that the analysis server will send.
 
-Argument RESPONSE parsed data received from the analysis server."
+Argument RESPONSE parsed data received from the analysis server.
+Argument CALLBACK is the function passed by  ‘company-mode’.
+Argument BUFFER the buffer containing the dart file."
   (-when-let* ((result-assoc (assoc 'result response))
   	       (id-assoc (assoc 'id result-assoc))
   	       (raw-id (cdr id-assoc))
@@ -78,7 +79,10 @@ Argument RESPONSE parsed data received from the analysis server."
   	  dart--analysis-server-callbacks)))
 
 (defun dart--get-completions (callback buffer)
-  "Ask the analysis server for suggestions."
+  "Ask the analysis server for suggestions.
+
+Argument CALLBACK is the function passed by  ‘company-mode’.
+Argument BUFFER the buffer containing the dart file."
 
   (dart--analysis-server-send
    "completion.getSuggestions"
