@@ -60,24 +60,6 @@ Argument RESPONSE contains the candidates, documentation, parameters to be displ
      completions)))
 
 
-(defun dart--register-for-completion-event (response callback buffer)
-  "Register for the event that the analysis server will send.
-
-Argument RESPONSE parsed data received from the analysis server.
-Argument CALLBACK is the function passed by  ‘company-mode’.
-Argument BUFFER the buffer containing the dart file."
-  (-when-let* ((result-assoc (assoc 'result response))
-  	       (id-assoc (assoc 'id result-assoc))
-  	       (raw-id (cdr id-assoc))
-  	       (id (string-to-number raw-id)))
-    (push (cons id
-  		(lambda (resp)
-  		  (-when-let* ((candidates (dart--company-prepare-candidates
-  					    resp)))
-		    (with-current-buffer buffer
-		      (funcall callback  candidates)))))
-  	  dart--analysis-server-callbacks)))
-
 (defun dart--get-completions (callback buffer)
   "Ask the analysis server for suggestions.
 
@@ -89,7 +71,14 @@ Argument BUFFER the buffer containing the dart file."
    `((file . ,(buffer-file-name))
      (offset . ,(point)))
    (lambda (response)
-     (dart--register-for-completion-event response callback buffer))))
+     ;;set the dart-completion-callback on dart-mode, so that it will in turn
+     ;;execute company mode callback.
+     (setq dart-completion-callback
+	   (lambda (resp)
+	     (-when-let* ((candidates (dart--company-prepare-candidates
+				       resp)))
+	       (with-current-buffer buffer
+		 (funcall callback  candidates))))))))
 
 (defun dart--completion-annotation (s)
   "Show method parameters as annotations"
@@ -126,7 +115,6 @@ Argument BUFFER the buffer containing the dart file."
     (post-completion (let ((anno (dart--completion-annotation arg)))
 		       (when anno
 			 (insert anno)
-			 (backward-list)
-			 )))))
+			 (backward-list))))))
 
 (provide 'company-dart)
