@@ -2,7 +2,7 @@
 
 ;; Author: Sidart Kurias
 ;; Version: 0.01
-;; Package-Requires: ((dart-mode "0.14") (company-mode))
+;; Package-Requires: ((dart-mode "0.14") (company-mode) (pos-tip "0.4.6"))
 ;; Keywords: language
 
 ;;
@@ -28,7 +28,8 @@
 ;;
 ;; Dart completion will be invoked only after the "." character has been typed.
 ;; You can manually invoke completion by binding (company-dart)
-;; to any key you like.
+;; to any key you like. Hitting F1 while in the completion list will show the
+;; documentation for that candidate.
 ;;
 ;; A good source for snippets
 ;; https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/
@@ -40,7 +41,7 @@
 ;;; Code:
 (require 'dart-mode)
 (require 'company)
-
+(require 'pos-tip)
 
 (defun dart--company-prepare-candidates (response)
   "Build completion from the parsed data received from the analysis server.
@@ -112,9 +113,9 @@ Argument BUFFER the buffer containing the dart file."
     (annotations (dart--completion-annotation arg))
     (doc-buffer (dart--completion-doc arg))
     (meta (dart--completion-meta arg))
-    (post-completion (let ((anno (dart--completion-annotation arg)))
-		       (when anno
-			 (insert anno)
-			 (backward-list))))))
+    (post-completion (let ((anno (dart--completion-annotation arg))
+			   (meta (dart--completion-meta arg)))
+    		       (when anno
+			 (pos-tip-show (format "%s\n%s" anno meta)))))))
 
 (provide 'company-dart)
