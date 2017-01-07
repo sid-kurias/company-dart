@@ -1,0 +1,281 @@
+* dart-mode
+**  any:
+any((${1:e}) => $0)
+**  assert:
+assert($0);
+**  case:
+case ${1:match}:
+  $0
+  break;
+**  casecontinue:
+case ${1:match}:
+  continue${2:$(if (> (length yas-text) 0) " " "")}${2:label};
+**  caseempty:
+case ${1:match}:$0
+
+**  casereturn:
+case ${1:match}:
+  return${2:$(if (> (length yas-text) 0) " " "")}${2:result};
+**  class:
+class ${1:`(jeg2/camelize (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`}${2:$(if (> (length yas-text) 0) " extends " "")}${2:ParentClass}${3:$(if (> (length yas-text) 0) " with " "")}${3:Mixin}${4:$(if (> (length yas-text) 0) " implements " "")}${4:Interface} {
+  $0
+}
+
+**  classabs:
+abstract class ${1:`(jeg2/camelize (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`}${2:$(if (> (length yas-text) 0) " extends " "")}${2:ParentClass}${3:$(if (> (length yas-text) 0) " with " "")}${3:Mixin}${4:$(if (> (length yas-text) 0) " implements " "")}${4:Interface} {
+  $0
+}
+
+**  ctr:
+`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`(${1:this.property})${2:$(if (> (length yas-text) 0) " : " "")}${2:super(property)} {
+  $0
+}
+
+**  ctrabs:
+`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`(${1:this.property})${2:$(if (> (length yas-text) 0) " : " "")}${2:super(property)};$0
+**  ctrconst:
+const `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`(${1:this.property})${2:$(if (> (length yas-text) 0) " : " "")}${2:super(property)} {
+  $0
+}
+**  ctrconstabs:
+const `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`(${1:this.property})${2:$(if (> (length yas-text) 0) " : " "")}${2:super(property)};$0
+**  ctrconstnamed:
+const `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`.${1:name}(${2:this.property})${3:$(if (> (length yas-text) 0) " : " "")}${3:super(property)} {
+  $0
+}
+**  ctrconstnamedabs:
+const `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`.${1:name}(${2:this.property})${3:$(if (> (length yas-text) 0) " : " "")}${3:super(property)};$0
+**  ctrfact:
+factory `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`(${1:this.property})${2:$(if (> (length yas-text) 0) " : " "")}${2:super(property)} {
+  $0
+}
+**  ctrfactnamed:
+factory `(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`.${1:name}(${2:this.property})${3:$(if (> (length yas-text) 0) " : " "")}${3:super(property)} {
+  $0
+}
+**  ctrnamed:
+`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`.${1:name}(${2:this.property})${3:$(if (> (length yas-text) 0) " : " "")}${3:super(property)} {
+  $0
+}
+**  ctrnamedabs:
+`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`.${1:name}(${2:this.property})${3:$(if (> (length yas-text) 0) " : " "")}${3:super(property)};$0
+**  default:
+default:
+  $0
+**  dowhile:
+do {
+  $0
+} while (${1:condition});
+**  else:
+else {
+  $0
+}
+**  elseif:
+else if (${1:condition}) {
+  $0
+}
+**  every:
+every((${1:e}) => $0)
+**  expand:
+expand((${1:e}) => $0)
+**  export:
+export "${1:uri}"${2:$(if (> (length yas-text) 0) " show " "")}${2:Type}${3:$(if (> (length yas-text) 0) " hide " "")}${3:Type};
+**  finally:
+finally {
+  $0
+}
+**  firstwhere:
+firstWhere((${1:e}) => $0${2:, orElse: () => })
+**  fn:
+${1:void} ${2:name}(${3:Type param}) {
+  $0
+}
+
+**  fnabstract:
+${1:void} ${2:name}(${3:Type param});$0
+
+**  fnanon:
+(${1:param}) {
+  $0
+}
+
+**  fnanononeline:
+(${1:param}) => $0
+
+**  fnoneline:
+${1:void} ${2:name}(${3:Type param}) => $0;
+
+**  fnopplus:
+${1:`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`} operator ${2:+}(${3:`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))` other}) {
+  $0
+}
+
+**  fnopplusoneline:
+${1:`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))`} operator ${2:+}(${3:`(save-excursion (search-backward-regexp "class +[A-Za-z0-9_]+") (forward-word 2) (backward-word) (thing-at-point 'word))` other}) => $0;
+**  fnstatic:
+static ${1:void} ${2:name}(${3:Type param}) {
+  $0
+}
+
+**  fnstaticoneline:
+static ${1:void} ${2:name}(${3:Type param}) => $0;
+
+**  fold:
+fold(${1:0}, (${2:accum}, ${3:e}) => $0)
+**  for:
+for (${1:var ${2:i} = ${3:0}};${4:$(if (> (length yas-text) 0) " " "")}${4:$2 < ${5:${6:a}.length}};${7:$(if (> (length yas-text) 0) " " "")}${7:$2++}) {
+  $0
+}
+**  foreach:
+forEach( (${1:e}) {
+  $0
+} );
+**  forin:
+for (var ${1:item} in ${2:list}) {
+  $0
+}
+**  get:
+${1:void} get ${2:name} {
+  $0
+}
+
+**  getoneline:
+${1:void} get ${2:name} => $0;
+
+**  if:
+if (${1:condition}) {
+  $0
+}
+
+**  ifbreak:
+if (${1:condition}) break;$0
+**  ifcontinue:
+if (${1:condition}) continue;$0
+
+**  ifelse:
+if (${1:condition}) {
+  $0
+} else {
+
+}
+**  ifreturn:
+if (${1:condition}) return${2:$(if (> (length yas-text) 0) " " "")}${2:result};$0
+**  imp:
+import "${1:uri}"${2:$(if (> (length yas-text) 0) " as " "")}${2:prefix}${3:$(if (> (length yas-text) 0) " show " "")}${3:Type}${4:$(if (> (length yas-text) 0) " hide " "")}${4:Type};
+**  impdart:
+import "dart:${1:html}"${2:$(if (> (length yas-text) 0) " as " "")}${2:prefix}${3:$(if (> (length yas-text) 0) " show " "")}${3:Type}${4:$(if (> (length yas-text) 0) " hide " "")}${4:Type};
+**  imppack:
+import "package:${1:lib/file}.dart"${2:$(if (> (length yas-text) 0) " as " "")}${2:prefix}${3:$(if (> (length yas-text) 0) " show " "")}${3:Type}${4:$(if (> (length yas-text) 0) " hide " "")}${4:Type};
+**  lastwhere:
+lastWhere((${1:e}) => $0${2:, orElse: () => })
+**  lib:
+library ${1:name};
+**  license:
+// Copyright (c) 2017, Sid Kurias. All rights reserved. Use of this source code
+// is governed by a license that can be found in the LICENSE file.
+**  main:
+void main(${1:List<String> args}) {
+  $0
+}
+
+**  map:
+map((${1:e}) => $0)
+**  newitrgen:
+new Iterable.generate(${1:10}, (${2:i}) => $0)
+**  newlistgen:
+new List.generate(${1:10}, (${2:i}) => $0${3:, growable: false})
+**  newmapfromitr:
+new Map.fromIterable(${1:iter}, key: (${2:e}) => $0, value: ($2) => )
+**  on:
+${1:$(if (> (length yas-text) 0) "on " "")}${1:SomeException}${1:$(if (> (length yas-text) 0) " " "")}${2:$(if (> (length yas-text) 0) "catch (" "")}${2:error}${2:$(if (> (length yas-text) 0) ") " "")}{
+  $0
+}
+
+**  part:
+part "${1:file}.dart";
+**  partof:
+part of ${1:name};
+**  print:
+print($0);
+**  reduce:
+reduce((${1:accum}, ${2:e}) => $0)
+**  removewhere:
+removeWhere((${1:e}) => $0)
+**  retainwhere:
+retainWhere((${1:e}) => $0)
+**  set:
+${1:void} set ${2:name}(${3:Type} value) {
+  $0
+}
+
+**  setoneline:
+${1:void} set ${2:name}(${3:Type} value) => $0;
+
+**  singlewhere:
+singleWhere((${1:e}) => $0)
+**  skipwhile:
+skipWhile((${1:e}) => $0)
+**  sort:
+sort(${1:(a, b) => $0})
+**  switch:
+switch (${1:variable}) {
+  $0
+}
+**  takewhile:
+takeWhile((${1:e}) => $0)
+**  tryfinally:
+try {
+  $0
+} finally {
+
+}
+**  tryon:
+try {
+  $0
+} ${1:$(if (> (length yas-text) 0) "on " "")}${1:SomeException}${1:$(if (> (length yas-text) 0) " " "")}${2:$(if (> (length yas-text) 0) "catch (" "")}${2:error}${2:$(if (> (length yas-text) 0) ") " "")}{
+
+}
+**  tryonfinally:
+try {
+  $0
+} ${1:$(if (> (length yas-text) 0) "on " "")}${1:SomeException}${1:$(if (> (length yas-text) 0) " " "")}${2:$(if (> (length yas-text) 0) "catch (" "")}${2:error}${2:$(if (> (length yas-text) 0) ") " "")}{
+
+} finally {
+
+}
+**  typedef:
+typedef ${1:void} ${2:FunctionType}(${3:Type param});
+** var:
+var ${1:name} = $0;
+** varconst:
+const ${1:name} = $0;
+** varconsttyped:
+const ${1:Type} ${2:name} = ${3:new $1($0)};
+
+** varfinal:
+final ${1:name} = $0;
+
+** varfinaltyped:
+final ${1:Type} ${2:name} = ${3:new $1($0)};
+** varstatic:
+static var ${1:name} = $0;
+
+** varstaticconst:
+static const ${1:name} = $0;
+** varstaticconsttyped:
+static const ${1:Type} ${2:name} = ${3:new $1($0)};
+** varstaticfinal:
+static final ${1:name} = $0;
+** varstaticfinaltyped:
+static final ${1:Type} ${2:name} = ${3:new $1($0)};
+** varstatictyped:
+static ${1:Type} ${2:name} = ${3:new $1($0)};
+** vartyped:
+${1:Type} ${2:name} = ${3:new $1($0)};
+
+** where:
+where((${1:e}) => $0)
+** while:
+while (${1:condition}) {
+  $0
+}

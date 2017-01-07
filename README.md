@@ -17,7 +17,8 @@ Company mode autocompletion for Dart
  shows the documentation as a popup.
 
  A good source for snippets
- https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/
+ https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/.
+ If you use yankpad, you can use the accompanying yankpad.org file for dart snippets.
 
  Requires dart-mode from https://github.com/sid-kurias/dart-mode. Company-mode
  and pos-tip are the other dependencies.
