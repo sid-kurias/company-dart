@@ -16,6 +16,8 @@ Company mode autocompletion for Dart
  the selected candidate. Alternatively https://github.com/expez/company-quickhelp
  shows the documentation as a popup.
 
-
  A good source for snippets
  https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/
+
+ Requires dart-mode from https://github.com/sid-kurias/dart-mode. Company-mode
+ and pos-tip are the other dependencies.
