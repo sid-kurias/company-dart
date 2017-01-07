@@ -5,7 +5,7 @@ Company mode autocompletion for Dart
 
     (add-hook 'dart-mode-hook (lambda ()
      (set (make-local-variable 'company-backends)
-      '(company-dart (company-dabbrev company-yasnippet)))))
+      '(company-dart (company-dabbrev company-yankpad)))))
 
  Dart completion will be invoked only after the "." character has been typed.
  For this to work company-minimum-prefix-length should be set to 0. If that
@@ -18,7 +18,9 @@ Company mode autocompletion for Dart
 
  A good source for snippets
  https://github.com/JEG2/dotfiles/tree/master/emacs.d/jeg2/snippets/dart-mode/.
- If you use yankpad, you can use the accompanying yankpad.org file for dart snippets.
+ If you use yankpad, you can use the accompanying yankpad.org file for dart
+ snippets. The corresponding company backend is at
+ https://github.com/sid-kurias/company-yankpad
 
  Requires dart-mode from https://github.com/sid-kurias/dart-mode. Company-mode
  and pos-tip are the other dependencies.
