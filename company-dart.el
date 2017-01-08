@@ -110,7 +110,7 @@ Argument BUFFER the buffer containing the dart file."
 	   (lambda (callback)
 	     (dart--get-completions callback (current-buffer)))))
     (duplicates t)
-    (annotations (dart--completion-annotation arg))
+    (annotation (dart--completion-annotation arg))
     (doc-buffer (dart--completion-doc arg))
     (meta (dart--completion-meta arg))
     (post-completion (let ((anno (dart--completion-annotation arg))
