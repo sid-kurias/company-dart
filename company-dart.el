@@ -116,6 +116,6 @@ Argument BUFFER the buffer containing the dart file."
     (post-completion (let ((anno (dart--completion-annotation arg))
 			   (meta (dart--completion-meta arg)))
     		       (when anno
-			 (pos-tip-show (format "%s\n%s" anno meta)))))))
+			 (pos-tip-show (format "%s\n%s" anno meta) nil nil nil -1))))))
 
 (provide 'company-dart)
