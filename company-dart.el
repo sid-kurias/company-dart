@@ -39,6 +39,8 @@
 ;;
 
 ;;; Code:
+(require 'company-template)
+
 (require 'dart-mode)
 (require 'company)
 (require 'pos-tip)
