@@ -2,7 +2,7 @@
 
 ;; Author: Sidart Kurias
 ;; Version: 0.01
-;; Package-Requires: ((dart-mode "0.14") (company-mode) (pos-tip "0.4.6"))
+;; Package-Requires: ((dart-mode "0.14") (company-mode "0.9.2") (pos-tip "0.4.6"))
 ;; Keywords: language
 
 ;;
@@ -39,8 +39,6 @@
 ;;
 
 ;;; Code:
-(require 'company-template)
-
 (require 'dart-mode)
 (require 'company)
 (require 'pos-tip)
