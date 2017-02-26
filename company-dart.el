@@ -1,8 +1,8 @@
 ;;; company-dart.el --- Autocompletion for Dart files -*- lexical-binding: t; -*-
 
 ;; Author: Sidart Kurias
-;; Version: 0.01
-;; Package-Requires: ((dart-mode "0.14") (company-mode) (pos-tip "0.4.6"))
+;; Version: 0.1
+;; Package-Requires: ((dart-mode "0.20") (company) (pos-tip "0.4.6"))
 ;; Keywords: language
 
 ;;
