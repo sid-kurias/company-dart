@@ -101,7 +101,7 @@ Argument BUFFER the buffer containing the dart file."
 ;;;###autoload
 (defun company-dart (command &optional arg &rest ignored)
   (interactive (list 'interactive))
-  (case command
+  (cl-case command
     (interactive (company-begin-backend 'company-dart))
     (prefix (and (derived-mode-p 'dart-mode)
 		 (dart--company-prefix)))
@@ -115,7 +115,11 @@ Argument BUFFER the buffer containing the dart file."
     (meta (dart--completion-meta arg))
     (post-completion (let ((anno (dart--completion-annotation arg))
 			   (meta (dart--completion-meta arg)))
-    		       (when anno
-			 (pos-tip-show (format "%s\n%s" anno meta) nil nil nil -1))))))
+		       (insert "()")
+    		       (when (> (length anno) 2)
+			 ;; > 2 implies non empty argument list
+			   (backward-char))
+		       (pos-tip-show (format "%s\n%s" anno meta) nil nil
+				     nil -1)))))
 
 (provide 'company-dart)
