@@ -115,7 +115,9 @@ Argument BUFFER the buffer containing the dart file."
     (meta (dart--completion-meta arg))
     (post-completion (let ((anno (dart--completion-annotation arg))
 			   (meta (dart--completion-meta arg)))
-		       (insert "()")
+		       (when (> (length anno) 0)
+			 ;;not a getter
+		       (insert "()"))
     		       (when (> (length anno) 2)
 			 ;; > 2 implies non empty argument list
 			   (backward-char))
